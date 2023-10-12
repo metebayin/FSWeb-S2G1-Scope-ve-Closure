@@ -18,8 +18,8 @@
 function ilkiniDon(stringArray, callback) {
   return callback(stringArray[0])
 }
-console.log('örnek görev:', ilkiniDon(['as','sa'],function(metin){return metin+metin}));
-
+console.log('örnek görev:', ilkiniDon(['as', 'sa'], function (metin) { return metin + metin }));
+//console.log(stringArray);
 // Başlangıç Challenge'ı Sonu
 
 
@@ -27,7 +27,7 @@ console.log('örnek görev:', ilkiniDon(['as','sa'],function(metin){return metin
 
 /*Görev 1: macSkoru()
   
-  Aşağıdaki skor1 ve skor2 kodlarını inceleyiniz ve aşağıdaki soruları altına not alarak cevaplayın
+  Aşağıdaki skor1 ve skor2 kodlarını inceleyiniz ve aşağıdaki soruları altına not alarak cevaplayın 
   
   1. skor1 ve skor2 arasındaki fark nedir?
   
@@ -40,12 +40,13 @@ console.log('örnek görev:', ilkiniDon(['as','sa'],function(metin){return metin
 function skorArtirici() {
   let skor = 0;
   return function skorGuncelle() {
-   return skor++;
+    return skor++;
   }
 }
 
 const skor1 = skorArtirici();
-
+console.log(skor1());
+console.log(skor1());
 // skor2 kodları
 let skor = 0;
 
@@ -64,10 +65,12 @@ Aşağıdaki takimSkoru() fonksiyonununda aşağıdakileri yapınız:
 Not: Bu fonskiyon, aşağıdaki diğer görevler için de bir callback fonksiyonu olarak da kullanılacak
 */
 
-function takimSkoru(/*Kodunuzu buraya yazınız*/){
-    /*Kodunuzu buraya yazınız*/
+function takimSkoru() {
+  let sayi = Math.floor(Math.random() * 16 + 10)
+  return sayi;
 }
 
+console.log((takimSkoru));
 
 
 
@@ -84,12 +87,21 @@ Aşağıdaki macSonucu() fonksiyonununda aşağıdakileri yapınız:
   "EvSahibi": 92,
   "KonukTakim": 80
 }
-*/ 
+*/
 
-function macSonucu(/*Kodunuzu buraya yazınız*/){
-  /*Kodunuzu buraya yazınız*/
+function macSonucu(callback, quart) {
+  let EvSahibi = 0, KonukTakim = 0;
+  for (let i = 0; i < quart; i++) {
+    EvSahibi += callback();
+    KonukTakim = KonukTakim + callback();
+  }
+  return {
+
+    "EvSahibi": EvSahibi,
+    "KonukTakim": KonukTakim
+  }
 }
-
+console.log(macSonucu(takimSkoru, 4));
 
 
 
@@ -109,11 +121,15 @@ Aşağıdaki periyotSkoru() fonksiyonununda aşağıdakileri yapınız:
   */
 
 
-function periyotSkoru(/*Kodunuzu buraya yazınız*/) {
-  /*Kodunuzu buraya yazınız*/
+function periyotSkoru(callback) {
+  let result = {
+    EvSahibi: callback(),
+    KonukTakim: callback(),
+  }
+  return result
 
 }
-
+console.log(periyotSkoru(takimSkoru));
 
 /* Zorlayıcı Görev 5: skorTabelasi() 
 Aşağıdaki skorTabelasi() fonksiyonunu kullanarak aşağıdakileri yapınız:
@@ -146,15 +162,36 @@ MAÇ UZAR ise skorTabelasi(periyotSkoru,takimSkoru,4)
 ] */
 // NOTE: Bununla ilgili bir test yoktur. Eğer logladığınız sonuçlar yukarıdakine benziyor ise tmamlandı sayabilirsiniz.
 
-function skorTabelasi(/*Kodunuzu buraya yazınız*/) {
-  /*Kodunuzu buraya yazınız*/
-}
+function skorTabelasi(periyotSkoru, takimSkoru, periyot) {
+  const skorArray = [];
+  const macSkoru = { EvSahibi: 0, KonukTakim: 0 };
 
+  for (let i = 1; i <= periyot; i++) {
+    const pSkoru = periyotSkoru(takimSkoru);
+    macSkoru.EvSahibi += pSkoru.EvSahibi;
+    macSkoru.KonukTakim += pSkoru.KonukTakim;
+
+    const pMetin = `${i}. Periyot: Ev Sahibi ${pSkoru.EvSahibi} - Konuk Takım ${pSkoru.KonukTakim}`;
+    skorArray.push(pMetin);
+  }
+  let u = 1;
+  while (macSkoru.EvSahibi == macSkoru.KonukTakim) {
+    const pSkoru = periyotSkoru(takimSkoru);
+    const uMetni = `${u}. Uzatma: Ev Sahibi ${pSkoru.EvSahibi} - Konuk Takım ${pSkoru.KonukTakim}`;
+    skorArray.push(uMetni);
+    u++;
+  }
+  const mMetni = `Maç Sonucu: Ev Sahibi ${macSkoru.EvSahibi} - Konuk Takım ${macSkoru.KonukTakim}`;
+  skorArray.push(mMetni);
+
+  return skorArray;
+}
+console.log(skorTabelasi(periyotSkoru, takimSkoru, 4))
 
 
 
 /* Aşağıdaki satırları lütfen değiştirmeyiniz*/
-function sa(){
+function sa() {
   console.log('Kodlar çalışıyor');
   return 'as';
 }
